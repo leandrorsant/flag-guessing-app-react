@@ -2,124 +2,143 @@ import React from 'react';
 import logo from './logo.svg';
 import Flag from 'react-world-flags'
 import { useState, useEffect, useRef, createRef } from 'react';
-import { Box, TextInput, Center, Alert, Title, BackgroundImage } from '@mantine/core';
-import { Button } from '@mantine/core';
-import { Text } from '@mantine/core';
-import { IconInfoCircle }  from '@tabler/icons-react';
-import { COUNTRY_DATA } from './components/country_data';
-import styles from './components/styles'
-import './App.css';
+import { AppShell, Box, Burger, Button, Center, Text, Modal, TextInput } from '@mantine/core';
 
-const getRandomArbitrary = (min: number, max: number) => {
-  return Math.trunc(Math.random() * (max - min) + min);
-}
+import AppMain from './components/AppMain';
+import { useDisclosure } from '@mantine/hooks';
+import Highscores from './components/Highscores';
 
-const getRandomCountry = () => {
-  const country = getRandomArbitrary(0,COUNTRY_DATA.length-1);
-  return COUNTRY_DATA[country];
-}
 
 function App() {
-  const [country, setCountry] = useState(getRandomCountry());
-  const [message,setMessage] = useState('');
-  const [correct, setCorrect] = useState(0);
-  const [incorrect, setIncorrect] = useState(0);
-  const icon = <IconInfoCircle />;  
-  const [isClient, setIsClient] = useState(false);
+  const [opened, { toggle }] = useDisclosure();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [gameOver, setGameOver] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(()=>{
-    setAnswerlist(createList())
-    setBtnStyle(answerList.map(()=> styles.btnDefault));
-  },[country])
-  
-  
-  const createList = () => {
-    const listLength = 4;
-    const correctAnswerIndex = getRandomArbitrary(0,listLength-1);
-    let list = []
-    for(let x=0;x<listLength;x++){
-      if(x == correctAnswerIndex){
-        list.push(country)
-      }else{
-        let randomCountry = country;
-        while(randomCountry.numeric == country.numeric){
-          randomCountry = getRandomCountry(); 
-        }
-        list.push(randomCountry);
+  const API_URL = "http://127.0.0.1:5000/users/name/"
+  const fetchUser =  async (name:string) => {
+    await fetch(API_URL + name)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `This is an HTTP error: The status is ${response.status}`
+        );
       }
-    }
-      return list;
+
+      return response.json()})
+    .then((data)=> {
+      setCurrentUser(data[0])
+    }) 
+    .catch((error)=> {});
   }
-  const [answerList,setAnswerlist] = useState(createList());
-  const [btnStyle,setBtnStyle] = useState(answerList.map(()=> styles.btnDefault));
-  
-  
-  const handleMessage = (message : string)=>{
-    if(message == 'Correct'){
-      return <Alert variant="light" color="green" title="Correct" icon={icon}>
-      Way to go!
-    </Alert>
+
+  const handleAccountCreation = async () => {
+    const requestBody = {
+      name : username,
+      password: password,
+      highscore: 0
     }
-    if(message == 'Wrong')
-      return <Alert variant="light" color="red" title="Wrong" icon={icon}>
-      That's not it...
-    </Alert>
-    return "";
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(requestBody)
   }
-  
+  try{
+    const response = await fetch(
+      "http://127.0.0.1:5000/users/",requestOptions).then( (response) => {
+      if(response.status == 201){
+        alert("Account Created")
+      }
+        else{
+        throw new Error(
+          "Username is already taken"
+        );
+        }
+        return response.json()
+      } ).then ( (data) => {
+        setCurrentUser(data[0])
+      })
+    }catch(error : any){
+      alert(error.message)
+    }
+
+  }
+
+  const handleLogin = async () => {
+    const requestBody = {
+      name : username,
+      password: password
+    }
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(requestBody)
+  }
+  try{
+    const response = await fetch(
+      "http://127.0.0.1:5000/users/login",requestOptions).then( (response) => {
+      if(!response.ok)
+        if(response.status == 404){
+          alert("Incorrect username or password");
+          setCurrentUser(null);
+        }else{
+        throw new Error(
+          `This is an HTTP error: The status is ${response.status}`
+        );
+        }
+        return response.json()
+      } ).then ( (data) => {
+        setCurrentUser(data[0])
+      })
+    }catch(error : any){
+      alert(error.message)
+    }
+  }
+
+  const updateUser = (user : any) =>{
+    setCurrentUser(user);
+  }
+
   return (
     <>
-    {isClient && 
-    <Box><Box>
-      <Center>
-        <Title style={{marginTop:"50px"}} order={2}>Score: {correct}</Title>
-      </Center>
-      <Center >
-        <Center maw={400}>
-          <Flag style={{marginTop: "10px"}} code={country.numeric} width="300px" />
-        </Center>
+     <AppShell
+      header={{ height: 60 }}
+      navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      aside={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      padding="md"
+      styles={{}}
+    >
+      <AppShell.Header >
+        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+        <Text>{currentUser != null? "Hello, "+currentUser.name: "Logo"}</Text>
         
-      </Center>
-      <Center style={{margin: "10px 10px 0px 10px"}}>
-        <Title order={2}>What country is this?</Title>
-      </Center>
-    
-      <Box style={{marginTop:"10px"}}>
-      
-          {answerList.map((data, index)=>(
-            <Center>
-            <Button
-              key={index} 
-              style={btnStyle[index]} 
-              value={data.numeric} 
-              onClick={(e)=>{
-               
-              if(e.currentTarget.value == country.numeric){
-                setMessage('Correct')
-                setCountry(getRandomCountry());
-                setCorrect((prev) => prev+1);
-              }else{
-                setMessage('Wrong')
-                setIncorrect((prev) => prev+1);
-                btnStyle[index] = styles.btnWrong;
-              }
-            }}>{data.name}</Button></Center>
-          ))}
-          </Box>
         
-        <Center>
-          <Box>
-            <Box style={{width:"300px"}}>{handleMessage(message)}</Box>
-          </Box>
-        </Center>
+        <Box style={{display:"flex", justifyContent: 'flex-end' }}>
+        {currentUser == null?<>
+          <TextInput value={username} onChange={(input) => setUsername(input.currentTarget.value)} placeholder='username'></TextInput>
+          <TextInput value={password} onChange={(input) => setPassword(input.currentTarget.value)} placeholder='password'></TextInput>
+          <Button onClick={ async ()=>{ 
+            handleLogin();
+            }}>Login</Button>
+            <Button onClick={ async ()=>{ 
+              handleAccountCreation()
+            }}>Create Account</Button>
+            </>
+            :<Button onClick={()=>{ 
+              setCurrentUser(null)
+              }}>Logout</Button>
+          }
+        </Box>:
+        
+        
+        
+      </AppShell.Header>
 
-        </Box>      
-    </Box>
-    }
+      <AppShell.Navbar p="md"><Highscores user={currentUser} setUser={setCurrentUser}/></AppShell.Navbar>
+      <AppShell.Main><AppMain user={currentUser} gameOver={gameOver} setGameOver={setGameOver}/></AppShell.Main>
+      <AppShell.Aside>Aside</AppShell.Aside>
+    </AppShell>
     </>
   );
 }
