@@ -103,18 +103,19 @@ function App() {
   return (
     <>
      <AppShell
-      header={{ height: 60 }}
+      header={{ height: 70 }}
       navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       aside={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       padding="md"
-      styles={{}}
+      withBorder={false}
     >
       <AppShell.Header >
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        <Text>{currentUser != null? "Hello, "+currentUser.name: "Logo"}</Text>
+        
         
         
         <Box style={{display:"flex", justifyContent: 'flex-end' }}>
+        <Text style={{position:'absolute', top:0, left:0}} size="30px">{currentUser != null? "Hello, "+currentUser.name : ""}</Text>
         {currentUser == null?<>
           <TextInput value={username} onChange={(input) => setUsername(input.currentTarget.value)} placeholder='username'></TextInput>
           <TextInput value={password} onChange={(input) => setPassword(input.currentTarget.value)} placeholder='password'></TextInput>
@@ -129,7 +130,7 @@ function App() {
               setCurrentUser(null)
               }}>Logout</Button>
           }
-        </Box>:
+        </Box>
         
         
         
@@ -137,7 +138,7 @@ function App() {
 
       <AppShell.Navbar p="md"><Highscores user={currentUser} setUser={setCurrentUser}/></AppShell.Navbar>
       <AppShell.Main><AppMain user={currentUser} gameOver={gameOver} setGameOver={setGameOver}/></AppShell.Main>
-      <AppShell.Aside>Aside</AppShell.Aside>
+      <AppShell.Aside></AppShell.Aside>
     </AppShell>
     </>
   );
