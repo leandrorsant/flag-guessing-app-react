@@ -119,6 +119,7 @@ function App() {
         {currentUser == null?<>
           <TextInput value={username} onChange={(input) => setUsername(input.currentTarget.value)} placeholder='username'></TextInput>
           <TextInput value={password} onChange={(input) => setPassword(input.currentTarget.value)} placeholder='password'></TextInput>
+          
           <Button onClick={ async ()=>{ 
             handleLogin();
             }}>Login</Button>
