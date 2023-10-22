@@ -1,7 +1,7 @@
-import React from 'react'
-import { IconHeartFilled, IconHeart, IconHeartBroken } from '@tabler/icons-react'
-import { Box, Center } from '@mantine/core'
-type Props = {}
+
+import { IconHeartFilled, IconHeartBroken } from '@tabler/icons-react'
+import { Box } from '@mantine/core'
+
 
 
 

@@ -39,7 +39,6 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
   const [message,setMessage] = useState('');
   const [correct, setCorrect] = useState(0);
   const [incorrect, setIncorrect] = useState(0);
-  const [highscore, setHighscore] = useState(0);
   const icon = <IconInfoCircle />;  
   const [isClient, setIsClient] = useState(false);
 
@@ -65,7 +64,7 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
     const response = await fetch(
       "http://"+API_IP+"/users/"+user._id,requestOptions).then( (response) => {
       if(response.ok){
-        //alert("Highscore update")
+
       }
       else{
         throw new Error(
@@ -101,23 +100,8 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
   }, [user])
 
   useEffect(()=> {
-    // if(correct > highscore){
-    //     setHighscore(correct);
-        
-    //   if(user != null){
-    //       updateUserHighscore(highscore);
-    //   }
-    // }
-    
     if(remainingTries <= 0){
       setGameOver(true);
-      //alert("Game Over")
-      //alert("highscore: "+highscore)
-      
-    //setHighscore(correct);
-    // if(user != null){
-    //     updateUserHighscore(highscore);
-    // }
     setBtnStyle(answerList.map(()=> styles.btnDefault));
     setRemainingTries(5);
     setCorrect(0);
@@ -129,7 +113,6 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
     if(user != null){
       fetchUser(user.name);
     }
-    //fetchSingleUser("6530056cba85c10d2bf90fa4")
   }, []);
 
   useEffect(()=>{
@@ -202,14 +185,9 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
                 <RemainingTries count={remainingTries} total={5}/>
                 
               </Box>
-              {/* <Title style={{textAlign:"center"}} order={3}>What country is this?</Title> */}
               <Center style={{width:"300px"}}>
                   <Flag style={{maxHeight:"200px"}} code={country.numeric} width="300px" />
               </Center>
-
-            
-
-            {/* <Box style={{marginTop:"10px", width:"300px"}}> */}
                 {answerList.map((data, index)=>(
                   <Center>
                   <Button
@@ -232,7 +210,6 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
                   fullWidth
                   >{data.name}</Button></Center>
                 ))}
-            {/* </Box> */}
 
           </Box>
       </Center>

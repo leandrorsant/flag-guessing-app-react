@@ -1,9 +1,7 @@
 import { TextInput,Button, Text } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { API_IP } from './Constants'
-
-type Props = {}
 
 const Login = ({setCurrentUser} :any ) => {
   const [username, setUsername] = useState("")

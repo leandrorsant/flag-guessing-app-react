@@ -1,15 +1,11 @@
-import React from 'react';
-import logo from './logo.svg';
-import Flag from 'react-world-flags'
-import { useState, useEffect, useRef, createRef } from 'react';
-import { AppShell, Box, Burger, Button, Center, Text, Modal, TextInput } from '@mantine/core';
+import { useState, useEffect } from 'react';
+import { AppShell } from '@mantine/core';
 import AppMain from './components/AppMain';
-import { useDisclosure, useLocalStorage } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import Highscores from './components/Highscores';
 import { modals } from '@mantine/modals';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
-import { IconFlag, IconFlag2, IconFlag3, IconFlagFilled, IconFlagSearch } from '@tabler/icons-react';
 import { API_IP } from './components/Constants';
 import { HeaderMegaMenu } from './components/HeaderMegaMenu';
 

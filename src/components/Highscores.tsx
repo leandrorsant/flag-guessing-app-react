@@ -1,7 +1,6 @@
-import { Box, Center, Loader, Table, TableTd, TableTr, Text, Title } from '@mantine/core'
-import React, { useEffect, useState } from 'react'
+import { Box, Center, Loader, Table, TableTd, TableTr, Title } from '@mantine/core'
+import { useEffect, useState } from 'react'
 import { API_IP } from './Constants'
-import { IconFlag } from '@tabler/icons-react'
 const API_URL = "http://"+API_IP+"/users"
 
 
