@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "server": "npm run devStart --prefix ./server;",
+    "devStart": "npm run devStart --prefix ./server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -1,4 +1,4 @@
-import { TextInput,Button } from '@mantine/core'
+import { TextInput,Button, Text } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import React, { useState } from 'react'
 import { API_IP } from './Constants'
@@ -25,7 +25,17 @@ const Login = ({setCurrentUser} :any ) => {
       "http://"+API_IP+"/users/login",requestOptions).then( (response) => {
       if(!response.ok)
         if(response.status == 404){
-          alert("Incorrect username or password");
+          modals.open({
+            title: 'Unable to sign in',
+            styles:{
+              title:{color:"red"}
+            },
+            children: (
+              <>
+                <Text>Incorrect username or password.</Text>
+              </>
+            ),
+          });
           setCurrentUser(null);
         }else{
         throw new Error(

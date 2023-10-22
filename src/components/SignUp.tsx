@@ -1,4 +1,4 @@
-import { TextInput,Button } from '@mantine/core'
+import { TextInput,Button, Text } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import React, { useState } from 'react'
 import { API_IP } from './Constants'
@@ -25,7 +25,14 @@ const SignUp = ({setCurrentUser} :any ) => {
     const response = await fetch(
       "http://"+API_IP+"/users/",requestOptions).then( (response) => {
       if(response.status == 201){
-        alert("Account Created")
+        modals.open({
+          title: 'Account created',
+          children: (
+            <>
+              <Text>You can now sign in to your newly created account to save your highscores.</Text>
+            </>
+          ),
+        });
       }
         else{
         throw new Error(
@@ -37,7 +44,18 @@ const SignUp = ({setCurrentUser} :any ) => {
         setCurrentUser(data[0])
       })
     }catch(error : any){
-      alert(error.message)
+      modals.open({
+        title:'Unable to create account',
+        styles:{
+          title:{color:"red"}
+        },
+        children: (
+          <>
+            <Text>{error.message}</Text>
+          </>
+        ),
+      });
+      
     }
 
   }

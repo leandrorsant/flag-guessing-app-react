@@ -96,6 +96,7 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
     if(user != null){
         updateUserHighscore(highscore);
     }
+    setBtnStyle(answerList.map(()=> styles.btnDefault));
     setRemainingTries(5);
     setCorrect(0);
     }
@@ -150,56 +151,52 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
     <>
     {gameOver && <GameOver currentUser={user} setCurrentUser={setUser} setGameOver={setGameOver}/>}
     {isClient && !gameOver && 
-    <Box><Box>
-      <Center>
-        <Title order={2}>Score: {correct}</Title>
-      </Center>
-      <Center>
-      <Box style={{width:"300px"}}>
-        <RemainingTries count={remainingTries} total={5}/>
-      </Box>
-      </Center>
-      <Center >
-        <Center maw={400}>
-          <Flag style={{marginTop: "10px"}} code={country.numeric} width="300px" />
-        </Center>
-        
-      </Center>
-      <Center style={{margin: "10px 10px 0px 10px"}}>
-        <Title order={2}>What country is this?</Title>
-      </Center>
-    
-      <Box style={{marginTop:"10px"}}>
-      
-          {answerList.map((data, index)=>(
+      <Center style={{
+        position: 'absolute', left: '50%', top: '50%',
+        transform: 'translate(-50%, -50%)'}}>
+        <Box>
             <Center>
-            <Button
-              key={index} 
-              style={btnStyle[index]} 
-              value={data.numeric} 
-              onClick={(e)=>{
-               
-              if(e.currentTarget.value == country.numeric){
-                setMessage('Correct')
-                setCountry(getRandomCountry());
-                setCorrect((prev) => prev+1);
-              }else{
-                setMessage('Wrong')
-                setIncorrect((prev) => prev+1);
-                setRemainingTries((prev) => prev-1)
-                btnStyle[index] = styles.btnWrong;
-              }
-            }}>{data.name}</Button></Center>
-          ))}
+              <Title order={2}>Score: {correct}</Title>
+            </Center>
+
+            
+              <Box style={{width:"300px"}}>
+                <RemainingTries count={remainingTries} total={5}/>
+              </Box>
+            
+            <Center style={{width:"300px"}}>
+                <Flag style={{marginTop: "10px"}} code={country.numeric} width="300px" />
+            </Center>
+
+            <Title style={{textAlign:"center"}} order={2}>What country is this?</Title>
+
+            <Box style={{marginTop:"10px"}}>
+                {answerList.map((data, index)=>(
+                  <Center>
+                  <Button
+                    key={index} 
+                    style={btnStyle[index]} 
+                    value={data.numeric} 
+                    onClick={(e)=>{
+                    
+                    if(e.currentTarget.value == country.numeric){
+                      setMessage('Correct')
+                      setCountry(getRandomCountry());
+                      setCorrect((prev) => prev+1);
+                    }else{
+                      setMessage('Wrong')
+                      setIncorrect((prev) => prev+1);
+                      setRemainingTries((prev) => prev-1)
+                      btnStyle[index] = styles.btnWrong;
+                    }
+                  }}
+                  fullWidth
+                  >{data.name}</Button></Center>
+                ))}
+            </Box>
+
           </Box>
-        
-        <Center>
-          <Box>
-            {/* <Box style={{width:"300px"}}>{handleMessage(message)}</Box> */}
-          </Box>
-        </Center>
-        </Box>      
-    </Box>
+      </Center>
     }
     </>
   );

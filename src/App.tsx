@@ -4,7 +4,7 @@ import Flag from 'react-world-flags'
 import { useState, useEffect, useRef, createRef } from 'react';
 import { AppShell, Box, Burger, Button, Center, Text, Modal, TextInput } from '@mantine/core';
 import AppMain from './components/AppMain';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import Highscores from './components/Highscores';
 import { modals } from '@mantine/modals';
 import Login from './components/Login';
@@ -20,6 +20,22 @@ function App() {
   const [password, setPassword] = useState("");
   const [gameOver, setGameOver] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
+
+  
+  useEffect(()=>{
+    const user = localStorage.getItem('user');
+    if(user)
+      setCurrentUser(JSON.parse(user));
+  },[])
+
+  useEffect(()=>{
+    if(currentUser == null)
+      localStorage.removeItem('user');
+    else {
+      localStorage.setItem('user', JSON.stringify(currentUser))
+
+    }
+  },[currentUser])
 
   const API_URL = "http://"+API_IP+"/users/name/"
   const fetchUser =  async (name:string) => {
@@ -143,7 +159,7 @@ function App() {
     <>
     
      <AppShell
-      header={{ height: 70 }}
+      header={{ height: 50 }}
       navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       aside={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       padding="md"
