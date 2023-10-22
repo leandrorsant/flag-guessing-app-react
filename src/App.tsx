@@ -3,10 +3,15 @@ import logo from './logo.svg';
 import Flag from 'react-world-flags'
 import { useState, useEffect, useRef, createRef } from 'react';
 import { AppShell, Box, Burger, Button, Center, Text, Modal, TextInput } from '@mantine/core';
-
 import AppMain from './components/AppMain';
 import { useDisclosure } from '@mantine/hooks';
 import Highscores from './components/Highscores';
+import { modals } from '@mantine/modals';
+import Login from './components/Login';
+import SignUp from './components/SignUp';
+import { IconFlag, IconFlag2, IconFlag3, IconFlagFilled, IconFlagSearch } from '@tabler/icons-react';
+import { API_IP } from './components/Constants';
+import { HeaderMegaMenu } from './components/HeaderMegaMenu';
 
 
 function App() {
@@ -16,7 +21,7 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
 
-  const API_URL = "http://127.0.0.1:5000/users/name/"
+  const API_URL = "http://"+API_IP+"/users/name/"
   const fetchUser =  async (name:string) => {
     await fetch(API_URL + name)
     .then((response) => {
@@ -33,6 +38,44 @@ function App() {
     .catch((error)=> {});
   }
 
+  const handleUsernameChange = (input: any) => {
+    setUsername(prev => prev+input);
+    alert(username);
+  }
+
+  const signUpModal = () =>{
+    modals.open({
+      title: 'Create your account',
+      children: (
+        <>
+  
+        <SignUp 
+          setCurrentUser={setCurrentUser}
+        />
+
+        </>
+      ),
+    });
+  }
+
+  const signInModal = () => {
+    
+    modals.open({
+      title: 'Sign in to your account',
+      children: (
+        <>
+  
+        <Login  
+          setCurrentUser={setCurrentUser}
+        />
+  
+         
+        </>
+      ),
+    });
+  }
+  
+
   const handleAccountCreation = async () => {
     const requestBody = {
       name : username,
@@ -46,7 +89,7 @@ function App() {
   }
   try{
     const response = await fetch(
-      "http://127.0.0.1:5000/users/",requestOptions).then( (response) => {
+      "http://"+API_IP+"/users/",requestOptions).then( (response) => {
       if(response.status == 201){
         alert("Account Created")
       }
@@ -77,7 +120,7 @@ function App() {
   }
   try{
     const response = await fetch(
-      "http://127.0.0.1:5000/users/login",requestOptions).then( (response) => {
+      "http://"+API_IP+"/users/login",requestOptions).then( (response) => {
       if(!response.ok)
         if(response.status == 404){
           alert("Incorrect username or password");
@@ -96,12 +139,9 @@ function App() {
     }
   }
 
-  const updateUser = (user : any) =>{
-    setCurrentUser(user);
-  }
-
   return (
     <>
+    
      <AppShell
       header={{ height: 70 }}
       navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
@@ -110,35 +150,39 @@ function App() {
       withBorder={false}
     >
       <AppShell.Header >
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+        {/* <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" /> */}
+        <HeaderMegaMenu 
+          currentUser={currentUser} 
+          setCurrentUser={setCurrentUser} 
+          signInModal={signInModal}
+          signUpModal={signUpModal}
+        />
         
-        
-        
-        <Box style={{display:"flex", justifyContent: 'flex-end' }}>
-        <Text style={{position:'absolute', top:0, left:0}} size="30px">{currentUser != null? "Hello, "+currentUser.name : ""}</Text>
+        {/* <Box style={{display:"flex", justifyContent: 'flex-end' }}>
+        <Box style={{display:"flex" ,position:'absolute', top:0, left:10}}><Text  size="20px" mt={'sm'} ml={'md'}><IconFlagSearch size={20}/>Flag Guessing</Text></Box>
         {currentUser == null?<>
-          <TextInput value={username} onChange={(input) => setUsername(input.currentTarget.value)} placeholder='username'></TextInput>
-          <TextInput value={password} onChange={(input) => setPassword(input.currentTarget.value)} placeholder='password'></TextInput>
-          
-          <Button onClick={ async ()=>{ 
-            handleLogin();
-            }}>Login</Button>
-            <Button onClick={ async ()=>{ 
-              handleAccountCreation()
-            }}>Create Account</Button>
+          <Button size='sm' onClick={ async ()=>{ 
+              signInModal()
+            }} ml={'md'} mt={'md'}>Login</Button>
+            <Button size='sm' onClick={ async ()=>{ 
+              signUpModal()
+            }} ml={'md'} mt={'md'} mr={'md'}>Sign up</Button>
             </>
-            :<Button onClick={()=>{ 
+            :<Box style={{display:"flex"}}>
+              <Text size="30px" ml={'md'} mt={'md'}>{currentUser != null? "Hello, "+currentUser.name : ""}</Text>
+              <Button onClick={()=>{ 
               setCurrentUser(null)
-              }}>Logout</Button>
+              }} ml={'md'} mt={'md'} mr={'md'}>Logout</Button>
+              </Box>
           }
-        </Box>
+        </Box> */}
         
         
         
       </AppShell.Header>
 
       <AppShell.Navbar p="md"><Highscores user={currentUser} setUser={setCurrentUser}/></AppShell.Navbar>
-      <AppShell.Main><AppMain user={currentUser} gameOver={gameOver} setGameOver={setGameOver}/></AppShell.Main>
+      <AppShell.Main><AppMain user={currentUser} setUser={setCurrentUser} gameOver={gameOver} setGameOver={setGameOver}/></AppShell.Main>
       <AppShell.Aside></AppShell.Aside>
     </AppShell>
     </>

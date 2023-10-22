@@ -250,3 +250,5 @@ export const COUNTRY_CODES = [
     "882",
     "887",
     "894",];
+
+export const API_IP = "192.168.3.8:5000"

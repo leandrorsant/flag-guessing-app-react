@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@mantine/core/styles.css';
 import { MantineProvider, createTheme } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 
 import './index.css';
 import App from './App';
@@ -17,7 +18,9 @@ root.render(
   
   <React.StrictMode>
     <MantineProvider theme={theme}>
+      <ModalsProvider>
         <App />
+      </ModalsProvider>
     </MantineProvider>
   </React.StrictMode>
   

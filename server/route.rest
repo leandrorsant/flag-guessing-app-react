@@ -1,0 +1,40 @@
+GET http://127.0.0.1:5000/users
+
+###
+
+GET  http://127.0.0.1:5000/users/6530056cba85c10d2bf90fa4
+
+###
+GET http://127.0.0.1:5000/users/name/paul01
+
+###
+POST http://127.0.0.1:5000/users
+Content-Type: application/json
+
+{
+    "name":"marys",
+    "password":"grapses",
+    "highscore":12
+}
+
+###
+POST http://127.0.0.1:5000/users/login
+Content-Type: application/json
+
+{
+    "name":"paul",
+    "password":"banana"
+}
+
+###
+DELETE http://127.0.0.1:5000/users/653104a07a7b572733eb249e
+
+###
+PATCH http://127.0.0.1:5000/users/65310770785f7c1a9cda8b4a
+Content-Type: application/json
+
+{
+    "name":"mary",
+    "password":"grapses",
+    "highscore":1
+}

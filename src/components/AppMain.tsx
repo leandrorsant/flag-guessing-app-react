@@ -1,6 +1,6 @@
 import Flag from 'react-world-flags'
 import { useState, useEffect, useRef, createRef } from 'react';
-import { Box, TextInput, Center, Alert, Title, BackgroundImage } from '@mantine/core';
+import { Box, TextInput, Center, Alert, Title, BackgroundImage, Table, TableTr, TableTd } from '@mantine/core';
 import { Button } from '@mantine/core';
 import { Text } from '@mantine/core';
 import { IconInfoCircle }  from '@tabler/icons-react';
@@ -9,6 +9,7 @@ import styles from './styles'
 import RemainingTries from './RemainingTries';
 import { modals } from '@mantine/modals';
 import GameOver from './GameOver';
+import { API_IP } from './Constants';
 
 const getRandomArbitrary = (min: number, max: number) => {
   return Math.trunc(Math.random() * (max - min) + min);
@@ -33,7 +34,7 @@ const openModal = () => modals.openConfirmModal({
 });
 
 
-function AppMain({user, gameOver, setGameOver}:any) {
+function AppMain({user, setUser, gameOver, setGameOver}:any) {
   const [country, setCountry] = useState(getRandomCountry());
   const [message,setMessage] = useState('');
   const [correct, setCorrect] = useState(0);
@@ -62,7 +63,7 @@ function AppMain({user, gameOver, setGameOver}:any) {
   }
   try{
     const response = await fetch(
-      "http://127.0.0.1:5000/users/"+user._id,requestOptions).then( (response) => {
+      "http://"+API_IP+"/users/"+user._id,requestOptions).then( (response) => {
       if(response.ok){
         //alert("Highscore update")
       }
@@ -147,7 +148,7 @@ function AppMain({user, gameOver, setGameOver}:any) {
   
   return (
     <>
-    {gameOver && <GameOver setGameOver={setGameOver}/>}
+    {gameOver && <GameOver currentUser={user} setCurrentUser={setUser} setGameOver={setGameOver}/>}
     {isClient && !gameOver && 
     <Box><Box>
       <Center>
@@ -155,7 +156,7 @@ function AppMain({user, gameOver, setGameOver}:any) {
       </Center>
       <Center>
       <Box style={{width:"300px"}}>
-      <RemainingTries count={remainingTries} total={5}/>
+        <RemainingTries count={remainingTries} total={5}/>
       </Box>
       </Center>
       <Center >

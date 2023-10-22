@@ -1,11 +1,11 @@
-import { Center, Text, Title } from '@mantine/core'
+import { Box, Center, Loader, Table, TableTd, TableTr, Text, Title } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
+import { API_IP } from './Constants'
+const API_URL = "http://"+API_IP+"/users"
 
-const API_URL = "http://127.0.0.1:5000/users"
 
 
-
-const Highscores = ({user,setUser} : any) => {
+const Highscores = ({user,setUser, width=300} : any) => {
     //alert(JSON.stringify(user));
     const [users, setUsers] = useState<any []>([])
     const [isLoading, setIsLoading] = useState(true);
@@ -32,10 +32,6 @@ const Highscores = ({user,setUser} : any) => {
     setIsLoading(false);
   }, []);
 
-  useEffect(()=>{
-    fetchUsers()
-    setUser(user); 
-  }, [user]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -47,12 +43,28 @@ const Highscores = ({user,setUser} : any) => {
 
   return (
     <>
-    <Center><Title>Highscores</Title></Center>
-    {isLoading && <div>loading highscores</div>}
-      {
+    {isLoading && <Loader/>}
+    <Box style={{width:width}}>
+    <Center><Title order={3}>Highscores</Title></Center>
+    
+    <Table style={{width: width}}>
+      { 
+        
     users.map((data) => (
-        <Center><Text>{data.name}: {data.highscore} </Text></Center>
+        
+        
+          <TableTr>
+            {user != null && user.name == data.name?
+            <><TableTd style={{color:"green", backgroundColor:"lightgreen"}}>{data.name}:</TableTd><TableTd style={{color:"green", textAlign:"right", backgroundColor:"lightgreen"}}>{data.highscore}</TableTd></> :
+            <><TableTd>{data.name}:</TableTd><TableTd style={{textAlign:"right"}}>{data.highscore}</TableTd></>}
+          </TableTr>  
+        
+  
+        
+        
     ) )}
+    </Table>
+    </Box>
     </>
   )
 }
