@@ -30,11 +30,9 @@ Content-Type: application/json
 DELETE http://127.0.0.1:5000/users/653104a07a7b572733eb249e
 
 ###
-PATCH http://127.0.0.1:5000/users/65310770785f7c1a9cda8b4a
+PATCH http://127.0.0.1:5000/users/653107a1785f7c1a9cda8b4e
 Content-Type: application/json
 
 {
-    "name":"mary",
-    "password":"grapses",
-    "highscore":1
+    "highscore":"0"
 }

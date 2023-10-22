@@ -138,14 +138,14 @@ import { useState } from 'react';
       <Box pb={120}>
         <header className={classes.header}>
           <Group justify="space-between" h="100%">
-            <IconFlag size={30} />
+            <Text></Text>
   
             <Group visibleFrom="sm">
              {currentUser == null?
              <>
               <Button variant='default' onClick={ async ()=>{ 
                 signInModal()
-                }}>Log in</Button>
+                }}>Sign in</Button>
 
               <Button  onClick={ async ()=>{ 
                 signUpModal()
@@ -171,7 +171,7 @@ import { useState } from 'react';
           onClose={closeDrawer}
           size="100%"
           padding="md"
-          title="Navigation"
+          title=""
           hiddenFrom="sm"
           zIndex={1000000}
         >
@@ -186,7 +186,7 @@ import { useState } from 'react';
               <Button variant="default" onClick={async()=>{
                 signInModal()
                 closeDrawer()
-              }}>Log in</Button>
+              }}>Sign in</Button>
               <Button onClick={async ()=>{
                 signUpModal()
                 closeDrawer()

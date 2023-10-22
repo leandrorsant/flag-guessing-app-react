@@ -1,9 +1,9 @@
 import Flag from 'react-world-flags'
 import { useState, useEffect, useRef, createRef } from 'react';
-import { Box, TextInput, Center, Alert, Title, BackgroundImage, Table, TableTr, TableTd } from '@mantine/core';
+import { Box, TextInput, Center, Alert, Title, BackgroundImage, Table, TableTr, TableTd, Divider } from '@mantine/core';
 import { Button } from '@mantine/core';
 import { Text } from '@mantine/core';
-import { IconInfoCircle }  from '@tabler/icons-react';
+import { IconCheck, IconCheckbox, IconInfoCircle }  from '@tabler/icons-react';
 import { COUNTRY_DATA } from './country_data';
 import styles from './styles'
 import RemainingTries from './RemainingTries';
@@ -76,26 +76,48 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
       alert(error.message)
     }
   }
+
+  const API_URL = "http://"+API_IP+"/users/name/"
+  const fetchUser =  async (name:string) => {
+    await fetch(API_URL + name)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `This is an HTTP error: The status is ${response.status}`
+        );
+      }
+
+      return response.json()})
+    .then((data)=> {
+      setUser(data[0])
+    }) 
+    .catch((error)=> {});
+  }
+
   useEffect(()=>{
-    if(user != null){
-      setHighscore(user.highscore);
+    if(user == null){
+      setRemainingTries(5);
     }
-    setRemainingTries(5);
   }, [user])
 
   useEffect(()=> {
-    if(correct > highscore)
-        setHighscore(correct);
+    // if(correct > highscore){
+    //     setHighscore(correct);
+        
+    //   if(user != null){
+    //       updateUserHighscore(highscore);
+    //   }
+    // }
     
     if(remainingTries <= 0){
       setGameOver(true);
       //alert("Game Over")
       //alert("highscore: "+highscore)
       
-    setHighscore(correct);
-    if(user != null){
-        updateUserHighscore(highscore);
-    }
+    //setHighscore(correct);
+    // if(user != null){
+    //     updateUserHighscore(highscore);
+    // }
     setBtnStyle(answerList.map(()=> styles.btnDefault));
     setRemainingTries(5);
     setCorrect(0);
@@ -104,8 +126,24 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
 
   useEffect(() => {
     setIsClient(true);
+    if(user != null){
+      fetchUser(user.name);
+    }
     //fetchSingleUser("6530056cba85c10d2bf90fa4")
   }, []);
+
+  useEffect(()=>{
+    const update = async ()=>{
+      if(user != null){
+        await fetchUser(user.name)
+        if(correct > user.highscore){
+          await updateUserHighscore(correct);
+          await fetchUser(user.name)
+        }
+      }
+    }
+    update();
+  },[correct]);
 
   useEffect(()=>{
     setAnswerlist(createList())
@@ -155,22 +193,23 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
         position: 'absolute', left: '50%', top: '50%',
         transform: 'translate(-50%, -50%)'}}>
         <Box>
+            
+            
+            <Box style={{width:"300px", whiteSpace:'nowrap'}}>
             <Center>
-              <Title order={2}>Score: {correct}</Title>
+            <Title style={{marginLeft:"3px"}} order={2}>{correct}<IconCheckbox color='green'/></Title>
             </Center>
-
-            
-              <Box style={{width:"300px"}}>
                 <RemainingTries count={remainingTries} total={5}/>
+                
               </Box>
+              {/* <Title style={{textAlign:"center"}} order={3}>What country is this?</Title> */}
+              <Center style={{width:"300px"}}>
+                  <Flag style={{maxHeight:"200px"}} code={country.numeric} width="300px" />
+              </Center>
+
             
-            <Center style={{width:"300px"}}>
-                <Flag style={{marginTop: "10px"}} code={country.numeric} width="300px" />
-            </Center>
 
-            <Title style={{textAlign:"center"}} order={2}>What country is this?</Title>
-
-            <Box style={{marginTop:"10px"}}>
+            {/* <Box style={{marginTop:"10px", width:"300px"}}> */}
                 {answerList.map((data, index)=>(
                   <Center>
                   <Button
@@ -193,7 +232,7 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
                   fullWidth
                   >{data.name}</Button></Center>
                 ))}
-            </Box>
+            {/* </Box> */}
 
           </Box>
       </Center>

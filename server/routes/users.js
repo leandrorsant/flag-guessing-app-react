@@ -83,8 +83,10 @@ router.patch('/:id', getUser, async (req, res) => {
         res.user.highscore = req.body.highscore
     }
     try{
-        const updatedUser = await res.user.save()
-        res.json(updatedUser)
+        if(req.password == res.password){
+            const updatedUser = await res.user.save()
+            res.json(updatedUser)
+        }else res.status(404).json({message:"Incorrect password"})
     }catch(error){
         res.status(400).json({message: error.message})
     }

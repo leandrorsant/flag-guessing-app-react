@@ -1,6 +1,7 @@
 import { Box, Center, Loader, Table, TableTd, TableTr, Text, Title } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { API_IP } from './Constants'
+import { IconFlag } from '@tabler/icons-react'
 const API_URL = "http://"+API_IP+"/users"
 
 
@@ -45,7 +46,7 @@ const Highscores = ({user,setUser, width=300} : any) => {
     <>
     {isLoading && <Loader/>}
     <Box style={{width:width}}>
-    <Center><Title order={3}>Highscores</Title></Center>
+    <Center><Title order={3}>Highscores </Title></Center>
     
     <Table style={{width: width}}>
       { 
@@ -53,11 +54,11 @@ const Highscores = ({user,setUser, width=300} : any) => {
     users.map((data) => (
         
         
-          <TableTr>
-            {user != null && user.name == data.name?
-            <><TableTd style={{color:"green", backgroundColor:"lightgreen"}}>{data.name}:</TableTd><TableTd style={{color:"green", textAlign:"right", backgroundColor:"lightgreen"}}>{data.highscore}</TableTd></> :
-            <><TableTd>{data.name}:</TableTd><TableTd style={{textAlign:"right"}}>{data.highscore}</TableTd></>}
-          </TableTr>  
+    <TableTr>
+      {user != null && user.name == data.name?
+      <><TableTd style={{color:"green", backgroundColor:"lightgreen"}}>{data.name}:</TableTd><TableTd style={{color:"green", textAlign:"right", backgroundColor:"lightgreen"}}>{data.highscore}</TableTd></> :
+      <><TableTd>{data.name}:</TableTd><TableTd style={{textAlign:"right"}}>{data.highscore}</TableTd></>}
+    </TableTr>  
         
   
         

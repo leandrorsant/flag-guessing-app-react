@@ -24,8 +24,11 @@ function App() {
   
   useEffect(()=>{
     const user = localStorage.getItem('user');
-    if(user)
+    if(user){
       setCurrentUser(JSON.parse(user));
+      if(currentUser != null)
+        fetchUser(currentUser.name);
+    }
   },[])
 
   useEffect(()=>{
@@ -159,7 +162,7 @@ function App() {
     <>
     
      <AppShell
-      header={{ height: 50 }}
+      header={{ height: 40 }}
       navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       aside={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       padding="md"
