@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     highscore: {
         type: Number,
         required: false
-    }
+    },
 })
 
 module.exports = mongoose.model('user', userSchema)

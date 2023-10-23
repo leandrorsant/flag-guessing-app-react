@@ -3,12 +3,7 @@ import { modals } from '@mantine/modals'
 import { useState } from 'react'
 import { API_IP } from './Constants'
 
-import { sha256 } from 'crypto-hash'
-
-const getHash = async (str:string)=>{
-  const strHash = await sha256(str)
-  return strHash;      
-}
+import { sha256 } from './sha256'
 
 const Login = ({setCurrentUser} :any ) => {
   const [username, setUsername] = useState("")
@@ -17,7 +12,7 @@ const Login = ({setCurrentUser} :any ) => {
   const handleLogin = async () => {
     const requestBody = {
       name : username,
-      password: await getHash(password)
+      password: await sha256(password)
     }
     const requestOptions = {
       method: 'POST',

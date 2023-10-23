@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
     const newUserObject = new User({
         name: req.body.name,
         password: req.body.password,
-        highscore: req.body.highscore
+        highscore: req.body.highscore,
     })
     
     try{
@@ -60,8 +60,9 @@ router.post('/login', async (req, res) => {
         const user = await User.find({name : username}).find({password: password})
         if(user.length == 0){
             res.status(404).json({message: 'Username or password incorrect'});    
-        }else
+        }else{
             res.status(200).json(user);
+        }
     }catch(err){
         res.status(404).json({ message: err.message })
     }

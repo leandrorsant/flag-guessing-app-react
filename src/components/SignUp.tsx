@@ -2,23 +2,18 @@ import { TextInput,Button, Text } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import React, { useState } from 'react'
 import { API_IP } from './Constants'
-import { sha256 } from 'crypto-hash'
 
-type Props = {}
+import { sha256 } from './sha256'
 
 const SignUp = ({setCurrentUser} :any ) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("");
 
-  const getHash = async (str:string)=>{
-    const strHash = await sha256(str)
-    return strHash;      
-  }
 
   const handleAccountCreation = async () => {
     const requestBody = {
       name : username,
-      password: await getHash(password),
+      password: sha256(password),
       highscore: 0
     }
     const requestOptions = {
