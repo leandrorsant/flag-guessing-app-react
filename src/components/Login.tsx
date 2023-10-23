@@ -7,7 +7,7 @@ import { sha256 } from 'crypto-hash'
 
 const getHash = async (str:string)=>{
   const strHash = await sha256(str)
-  console.log(strHash)      
+  return strHash;      
 }
 
 const Login = ({setCurrentUser} :any ) => {
@@ -17,7 +17,7 @@ const Login = ({setCurrentUser} :any ) => {
   const handleLogin = async () => {
     const requestBody = {
       name : username,
-      password: password
+      password: await getHash(password)
     }
     const requestOptions = {
       method: 'POST',

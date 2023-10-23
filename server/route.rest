@@ -34,6 +34,6 @@ PATCH http://127.0.0.1:5000/users/653107a1785f7c1a9cda8b4e
 Content-Type: application/json
 
 {
-    "password":"apples",
+    "password":"f5903f51e341a783e69ffc2d9b335048716f5f040a782a2764cd4e728b0f74d9",
     "highscore":"1"
 }
