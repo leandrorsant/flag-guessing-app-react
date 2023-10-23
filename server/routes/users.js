@@ -73,17 +73,18 @@ router.patch('/:id', getUser, async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     console.log(res.user.highscore)
     console.log(res.user._id)
-    if(req.body.name != null){
-        res.user.name = req.body.name
-    }
-    if(req.body.password != null){
-        res.user.password = req.body.password
-    }
+
+    // if(req.body.name != null){
+    //     res.user.name = req.body.name
+    // }
+    // if(req.body.password != null){
+    //     res.user.password = req.body.password
+    // }
     if(req.body.highscore != null){
         res.user.highscore = req.body.highscore
     }
     try{
-        if(req.password == res.password){
+        if(req.body.password != null && req.body.password == res.user.password){
             const updatedUser = await res.user.save()
             res.json(updatedUser)
         }else res.status(404).json({message:"Incorrect password"})

@@ -34,5 +34,6 @@ PATCH http://127.0.0.1:5000/users/653107a1785f7c1a9cda8b4e
 Content-Type: application/json
 
 {
-    "highscore":"0"
+    "password":"apples",
+    "highscore":"1"
 }

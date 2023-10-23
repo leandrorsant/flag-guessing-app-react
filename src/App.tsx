@@ -9,7 +9,6 @@ import SignUp from './components/SignUp';
 import { API_IP } from './components/Constants';
 import { HeaderMegaMenu } from './components/HeaderMegaMenu';
 
-
 function App() {
   const [opened, { toggle }] = useDisclosure();
   const [username, setUsername] = useState("");
@@ -17,7 +16,6 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
 
-  
   useEffect(()=>{
     const user = localStorage.getItem('user');
     if(user){

@@ -44,7 +44,6 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
 
   const [remainingTries, setRemainingTries] = useState(5);
 
-
   const updateUserHighscore = async (score: any)=>{
     if(user == null)
       return;
@@ -155,19 +154,6 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
   const [btnStyle,setBtnStyle] = useState(answerList.map(()=> styles.btnDefault));
   
   
-  const handleMessage = (message : string)=>{
-    if(message == 'Correct'){
-      return <Alert variant="light" color="green" title="Correct" icon={icon}>
-      Way to go!
-    </Alert>
-    }
-    if(message == 'Wrong')
-      return <Alert variant="light" color="red" title="Wrong" icon={icon}>
-      That's not it...
-    </Alert>
-    return "";
-  }
-  
   return (
     <>
     {gameOver && <GameOver currentUser={user} setCurrentUser={setUser} setGameOver={setGameOver}/>}
@@ -195,13 +181,10 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
                     style={btnStyle[index]} 
                     value={data.numeric} 
                     onClick={(e)=>{
-                    
                     if(e.currentTarget.value == country.numeric){
-                      setMessage('Correct')
                       setCountry(getRandomCountry());
                       setCorrect((prev) => prev+1);
                     }else{
-                      setMessage('Wrong')
                       setIncorrect((prev) => prev+1);
                       setRemainingTries((prev) => prev-1)
                       btnStyle[index] = styles.btnWrong;
