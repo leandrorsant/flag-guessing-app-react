@@ -77,9 +77,9 @@ router.patch('/:id', getUser, async (req, res) => {
     // if(req.body.name != null){
     //     res.user.name = req.body.name
     // }
-    if(req.body.password != null){
-        res.user.password = req.body.password
-    }
+    // if(req.body.password != null){
+    //     res.user.password = req.body.password
+    // }
     if(req.body.highscore != null){
         res.user.highscore = req.body.highscore
     }
