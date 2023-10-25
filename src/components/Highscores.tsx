@@ -48,8 +48,8 @@ const Highscores = ({user,setUser, width=300} : any) => {
     <Center><Title order={3}>Highscores </Title></Center>
     
     <Table style={{width: width}}>
-      { 
-        
+    
+      {     
     users.map((data) => (
         
         

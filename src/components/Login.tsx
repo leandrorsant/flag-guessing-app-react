@@ -12,7 +12,7 @@ const Login = ({setCurrentUser} :any ) => {
   const handleLogin = async () => {
     const requestBody = {
       name : username,
-      password: await sha256(password)
+      password: sha256(password)
     }
     const requestOptions = {
       method: 'POST',
@@ -20,10 +20,10 @@ const Login = ({setCurrentUser} :any ) => {
       body: JSON.stringify(requestBody)
   }
   try{
-    const response = await fetch(
+    await fetch(
       "http://"+API_IP+"/users/login",requestOptions).then( (response) => {
       if(!response.ok)
-        if(response.status == 404){
+        if(response.status === 404){
           modals.open({
             title: 'Unable to sign in',
             styles:{
@@ -44,6 +44,7 @@ const Login = ({setCurrentUser} :any ) => {
         return response.json()
       } ).then ( (data) => {
         setCurrentUser(data[0])
+        localStorage.setItem('session_id', data[0].session_id);
       })
     }catch(error : any){
       alert(error.message)

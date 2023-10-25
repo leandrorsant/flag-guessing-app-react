@@ -1,6 +1,9 @@
 const express = require('express')
+const { default: mongoose } = require('mongoose')
 const router = express.Router()
 const User = require = require('../models/user')
+
+
 
 // Getting all users
 router.get('/', async (req, res) => {
@@ -31,6 +34,25 @@ router.get('/name/:name', async (req, res) => {
     }
 })
 
+// Getting User by session_id
+router.post('/session/', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    console.log(req.body)
+    try{
+        if(req.body.session_id){
+            const user = await User.find({session_id : req.body.session_id})
+            if(user.length > 0)
+                res.status(201).json(user);
+            else
+                res.status(404).json({ message: "Invalid session_id"})
+        }else{
+            res.status(404).json({ message: "Invalid session_id"})
+        }
+    }catch(err){
+        res.status(404).json({ message: err.message })
+    }
+})
+
 
 // Creating one User
 router.post('/', async (req, res) => {
@@ -56,13 +78,30 @@ router.post('/login', async (req, res) => {
     const username = req.body.name
     const password = req.body.password
     console.log(JSON.stringify(req.body))
+    
+    
+    let sessionId = new mongoose.Types.ObjectId;
+    sessionId = sha256(sessionId)
+
+    
     try{
+        if(req.body.password != null){
+        await User.find({name : username}).find({password: password}).updateOne({name : username}, {session_id: sessionId})
         const user = await User.find({name : username}).find({password: password})
         if(user.length == 0){
             res.status(404).json({message: 'Username or password incorrect'});    
         }else{
             res.status(200).json(user);
         }
+    }else if(req.body.session_id != null){
+        const userBySessionId = await User.findOne({session_id : req.body.session_id});
+        console.log(userBySessionId);
+        if(userBySessionId.length == 0){
+            res.status(404).json({message: 'Username or password incorrect'});     
+        }else{
+            res.status(200).json(userBySessionId); 
+        }
+    }
     }catch(err){
         res.status(404).json({ message: err.message })
     }

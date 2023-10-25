@@ -1,13 +1,11 @@
 import Flag from 'react-world-flags'
-import { useState, useEffect, useRef, createRef } from 'react';
-import { Box, TextInput, Center, Alert, Title, BackgroundImage, Table, TableTr, TableTd, Divider } from '@mantine/core';
+import { useState, useEffect } from 'react';
+import { Box, Center, Title } from '@mantine/core';
 import { Button } from '@mantine/core';
-import { Text } from '@mantine/core';
-import { IconCheck, IconCheckbox, IconInfoCircle }  from '@tabler/icons-react';
+import { IconCheckbox }  from '@tabler/icons-react';
 import { COUNTRY_DATA } from './country_data';
 import styles from './styles'
 import RemainingTries from './RemainingTries';
-import { modals } from '@mantine/modals';
 import GameOver from './GameOver';
 import { API_IP } from './Constants';
 
@@ -20,28 +18,11 @@ const getRandomCountry = () => {
   return COUNTRY_DATA[country];
 }
 
-const openModal = () => modals.openConfirmModal({
-  title: 'Please confirm your action',
-  children: (
-    <Text size="sm">
-      This action is so important that you are required to confirm it with a modal. Please click
-      one of these buttons to proceed.
-    </Text>
-  ),
-  labels: { confirm: 'Confirm', cancel: 'Cancel' },
-  onCancel: () => console.log('Cancel'),
-  onConfirm: () => console.log('Confirmed'),
-});
-
 
 function AppMain({user, setUser, gameOver, setGameOver}:any) {
   const [country, setCountry] = useState(getRandomCountry());
-  const [message,setMessage] = useState('');
   const [correct, setCorrect] = useState(0);
-  const [incorrect, setIncorrect] = useState(0);
-  const icon = <IconInfoCircle />;  
   const [isClient, setIsClient] = useState(false);
-
   const [remainingTries, setRemainingTries] = useState(5);
 
   const updateUserHighscore = async (score: any)=>{
@@ -60,7 +41,7 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
       body: JSON.stringify(requestBody)
   }
   try{
-    const response = await fetch(
+    await fetch(
       "http://"+API_IP+"/users/"+user._id,requestOptions).then( (response) => {
       if(response.ok){
 
@@ -101,6 +82,7 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
   useEffect(()=> {
     if(remainingTries <= 0){
       setGameOver(true);
+      
     setBtnStyle(answerList.map(()=> styles.btnDefault));
     setRemainingTries(5);
     setCorrect(0);
@@ -185,7 +167,6 @@ function AppMain({user, setUser, gameOver, setGameOver}:any) {
                       setCountry(getRandomCountry());
                       setCorrect((prev) => prev+1);
                     }else{
-                      setIncorrect((prev) => prev+1);
                       setRemainingTries((prev) => prev-1)
                       btnStyle[index] = styles.btnWrong;
                     }

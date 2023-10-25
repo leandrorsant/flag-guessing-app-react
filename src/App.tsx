@@ -16,23 +16,34 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
 
+  
   useEffect(()=>{
-    const user = localStorage.getItem('user');
-    if(user){
-      setCurrentUser(JSON.parse(user));
-      if(currentUser != null)
-        fetchUser(currentUser.name);
+    //const user = localStorage.getItem('user');
+    const sessionId = localStorage.getItem('session_id');
+    if(sessionId != null){
+      //fetch user here
+      //'/users/session'
+      fetchUserBySessionId(sessionId)
     }
+
+
+    // if(user){
+    //   setCurrentUser(JSON.parse(user));
+    //   if(currentUser != null)
+    //     fetchUser(currentUser.name);
+    // }
+    
   },[])
 
-  useEffect(()=>{
-    if(currentUser == null)
-      localStorage.removeItem('user');
-    else {
-      localStorage.setItem('user', JSON.stringify(currentUser))
-
-    }
-  },[currentUser])
+  // useEffect(()=>{
+  //   if(currentUser == null)
+  //     localStorage.removeItem('user');
+  //   else {
+  //     localStorage.setItem('user', JSON.stringify(currentUser))
+  //     console.log(currentUser._session_id)
+  //   }
+    
+  // },[currentUser])
 
   const API_URL = "http://"+API_IP+"/users/name/"
   const fetchUser =  async (name:string) => {
@@ -51,9 +62,34 @@ function App() {
     .catch((error)=> {});
   }
 
+
+  const fetchUserBySessionId =  async (sessionId:string) => {
+    const requestBody = {
+      session_id: sessionId
+    }
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(requestBody)
+  }
+    await fetch("http://"+API_IP+"/users/session", requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `This is an HTTP error: The status is ${response.status}`
+        );
+      }
+      
+      return response.json()})
+    .then((data)=> {
+      setCurrentUser(data[0])
+    }) 
+    .catch((error)=> {});
+  }
+
+
   const handleUsernameChange = (input: any) => {
     setUsername(prev => prev+input);
-    alert(username);
   }
 
   const signUpModal = () =>{
@@ -121,37 +157,7 @@ function App() {
 
   }
 
-  const handleLogin = async () => {
-    const requestBody = {
-      name : username,
-      password: password
-    }
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(requestBody)
-  }
-  try{
-    const response = await fetch(
-      "http://"+API_IP+"/users/login",requestOptions).then( (response) => {
-      if(!response.ok)
-        if(response.status == 404){
-          alert("Incorrect username or password");
-          setCurrentUser(null);
-        }else{
-        throw new Error(
-          `This is an HTTP error: The status is ${response.status}`
-        );
-        }
-        return response.json()
-      } ).then ( (data) => {
-        setCurrentUser(data[0])
-      })
-    }catch(error : any){
-      alert(error.message)
-    }
-  }
-
+  
   return (
     <>
     

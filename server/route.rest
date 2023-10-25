@@ -22,8 +22,9 @@ POST http://127.0.0.1:5000/users/login
 Content-Type: application/json
 
 {
-    "name":"paul",
-    "password":"banana"
+    "session_id": "65385ed7558955683978cd95"
+    //"name":"jack",
+    //"password":"f5903f51e341a783e69ffc2d9b335048716f5f040a782a2764cd4e728b0f74d9"
 }
 
 ###
@@ -36,4 +37,14 @@ Content-Type: application/json
 {
     "password":"f5903f51e341a783e69ffc2d9b335048716f5f040a782a2764cd4e728b0f74d9",
     "highscore":"1"
+}
+
+###
+POST http://127.0.0.1:5000/users/session
+Content-Type: application/json
+
+{
+    "session_id": "6538e58cbaebe71cc35daddb"
+    //"name":"jack",
+    //"password":"f5903f51e341a783e69ffc2d9b335048716f5f040a782a2764cd4e728b0f74d9"
 }

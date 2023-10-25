@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    session_id: {
+        type: String,
+        unique:true
+    }
 })
 
 module.exports = mongoose.model('user', userSchema)
