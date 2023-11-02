@@ -124,39 +124,6 @@ function App() {
     });
   }
   
-
-  const handleAccountCreation = async () => {
-    const requestBody = {
-      name : username,
-      password: password,
-      highscore: 0
-    }
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(requestBody)
-  }
-  try{
-    const response = await fetch(
-      "http://"+API_IP+"/users/",requestOptions).then( (response) => {
-      if(response.status == 201){
-        alert("Account Created")
-      }
-        else{
-        throw new Error(
-          "Username is already taken"
-        );
-        }
-        return response.json()
-      } ).then ( (data) => {
-        setCurrentUser(data[0])
-      })
-    }catch(error : any){
-      alert(error.message)
-    }
-
-  }
-
   
   return (
     <>

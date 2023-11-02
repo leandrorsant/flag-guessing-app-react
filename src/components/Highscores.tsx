@@ -44,7 +44,7 @@ const Highscores = ({user,setUser, width=300} : any) => {
   return (
     <>
     {isLoading && <Loader/>}
-    <Box style={{width:width}}>
+    <Box style={{width:width}} >
     <Center><Title order={3}>Highscores </Title></Center>
     
     <Table style={{width: width}}>

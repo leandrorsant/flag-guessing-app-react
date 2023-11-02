@@ -23,8 +23,10 @@ const SignUp = ({setCurrentUser} :any ) => {
   }
   try{
     const response = await fetch(
-      "http://"+API_IP+"/users/",requestOptions).then( (response) => {
+      "http://"+API_IP+"/users",requestOptions).then( (response) => {
+      console.log(response);
       if(response.status == 201){
+        
         modals.open({
           title: 'Account created',
           children: (
